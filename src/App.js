@@ -55,22 +55,19 @@ const KEY = "765f8f67";
 export default function App() {
   const [movies, setMovies] = useState([]);
   const [watched, setWatched] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const query = "intersellar";
 
-  useEffect(function () {
+  const query = "batman";
+
+  useEffect(() => {
     async function fetchMovies() {
-      setIsLoading(true);
       const res = await fetch(
         `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
       );
       const data = await res.json();
       setMovies(data.Search);
-      setIsLoading(false);
     }
     fetchMovies();
   }, []);
-
   return (
     <>
       <NavBar>
@@ -79,7 +76,9 @@ export default function App() {
       </NavBar>
 
       <Main>
-        <Box>{isLoading ? <Loader /> : <MovieList movies={movies} />}</Box>
+        <Box>
+          <MovieList movies={movies} />
+        </Box>
         <Box>
           <WatchedSummary watched={watched} />
           <WatchedMovieList watched={watched} />
@@ -87,10 +86,6 @@ export default function App() {
       </Main>
     </>
   );
-}
-
-function Loader() {
-  return <p className="loader">Loading...</p>;
 }
 
 function NavBar({ children }) {
@@ -127,7 +122,7 @@ function Search() {
 function Numresults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>{movies.length}</strong> results
+      Found <strong>{movies?.length}</strong> results
     </p>
   );
 }
