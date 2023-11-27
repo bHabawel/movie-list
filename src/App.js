@@ -255,36 +255,42 @@ function MovieDetails({ selectedId, onCloseMovie }) {
 
   return (
     <div className="details">
-      <header>
-        <button className="btn-back" onClick={onCloseMovie}>
-          &larr;
-        </button>
-        <img src={poster} alt={`Poster of ${movie} movie`} />
-        <div className="details-overview">
-          <h2>{title}</h2>
-          <p>
-            {released} &bull; {runtime}
-          </p>
-          <p>{genre}</p>
-          <p>
-            <span>⭐</span>
-            {imdbRating} IMdb Rating
-          </p>
-        </div>
-      </header>
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <>
+          <header>
+            <button className="btn-back" onClick={onCloseMovie}>
+              &larr;
+            </button>
+            <img src={poster} alt={`Poster of ${movie} movie`} />
+            <div className="details-overview">
+              <h2>{title}</h2>
+              <p>
+                {released} &bull; {runtime}
+              </p>
+              <p>{genre}</p>
+              <p>
+                <span>⭐</span>
+                {imdbRating} IMdb Rating
+              </p>
+            </div>
+          </header>
+          <section>
+            <div className="rating">
+              <StarRating maxRating={10} size={24} />
+            </div>
 
-      <section>
-        <div className="rating">
-          <StarRating maxRating={10} size={24} />
-        </div>
-
-        <p>
-          <em>{plot}</em>
-          {/* FIXME: add a classname or inline style for a margin since they are merged */}
-          <p>Starring {actors}</p>
-          <p>Directed by {director}</p>
-        </p>
-      </section>
+            <p>
+              <em>{plot}</em>
+              <p style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+                Starring {actors}
+              </p>
+              <p>Directed by {director}</p>
+            </p>
+          </section>
+        </>
+      )}
     </div>
   );
 }
