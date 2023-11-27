@@ -57,21 +57,23 @@ export default function App() {
   const [watched, setWatched] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
+  const [query, setQuery] = useState("");
 
-  const query = "batman";
+  const tempQuery = "fantastic 4";
 
   useEffect(() => {
     async function fetchMovies() {
       try {
         setIsLoading(true);
+        setError("");
+
         const res = await fetch(
           `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`
         );
-
-        if (!res.ok) throw new Error(`Error fetching movies`);
+        if (!res.ok) throw new Error("Could not fetch movies");
 
         const data = await res.json();
-        if (data.Response === "False") throw new Error(`Cannot find movie`);
+        if (data.Response === "False") throw new Error("Could not find movie");
 
         setMovies(data.Search);
       } catch (e) {
@@ -80,17 +82,24 @@ export default function App() {
         setIsLoading(false);
       }
     }
+
+    if (query.length < 3) {
+      setMovies([]);
+      setError("");
+      return;
+    }
     fetchMovies();
-  }, []);
+  }, [query]);
   return (
     <>
       <NavBar>
-        <Search />
+        <Search query={query} setQuery={setQuery} />
         <Numresults movies={movies} />
       </NavBar>
 
       <Main>
         <Box>
+          {/* {isLoading ? <Loader /> : <MovieList movies={movies} />} */}
           {isLoading && <Loader />}
           {!isLoading && !error && <MovieList movies={movies} />}
           {error && <ErrorMessage message={error} />}
@@ -111,8 +120,7 @@ function Loader() {
 function ErrorMessage({ message }) {
   return (
     <p className="error">
-      <span>⛔</span>
-      {message}
+      <span>⛔</span> {message}
     </p>
   );
 }
@@ -135,8 +143,7 @@ function Logo() {
   );
 }
 
-function Search() {
-  const [query, setQuery] = useState("");
+function Search({ query, setQuery }) {
   return (
     <input
       className="search"
