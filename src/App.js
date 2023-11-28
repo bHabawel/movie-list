@@ -319,13 +319,13 @@ function MovieDetails({ selectedId, onCloseMovie, onAddWatched, watched }) {
               )}
             </div>
 
-            <p>
+            <div>
               <em>{plot}</em>
               <p style={{ marginTop: "2rem", marginBottom: "2rem" }}>
                 Starring {actors}
               </p>
               <p>Directed by {director}</p>
-            </p>
+            </div>
           </section>
         </>
       )}
@@ -368,7 +368,7 @@ function WatchedMovieList({ watched, onDeleteWatched }) {
       {watched.map((movie) => (
         <WatchedMovie
           movie={movie}
-          key={movie.imdbID}
+          key={movie.imdbId}
           onDeleteWatched={onDeleteWatched}
         />
       ))}
